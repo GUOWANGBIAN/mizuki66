@@ -34,7 +34,7 @@ A modern, feature-rich static blog template built with [Astro](https://astro.bui
 
 ![Configuration](configuration.svg)
 
-### 🔧 Component Configuration System Restructuring
+### 🔧 Component Configuration System Restructuring 
 - **Unified Configuration Architecture:** Brand new modular component configuration system, supporting dynamic component management and order configuration
 - **Configuration-Driven Component Loading:** Restructured SideBar component, implementing fully configuration-based component loading mechanism
 - **Unified Control Switches:** Removed independent enable switches for music player and announcement components, unified control through sidebarLayoutConfig
