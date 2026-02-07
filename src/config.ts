@@ -33,19 +33,19 @@ export const siteConfig: SiteConfig = {
 
 	themeColor: {
 		hue: 230, // 主题色的默认色相，范围从 0 到 360。例如：红色：0，青色：200，蓝绿色：250，粉色：345
-		fixed: false, // 对访问者隐藏主题色选择器
+		fixed: true, // 对访问者隐藏主题色选择器
 	},
 
 	// 特色页面开关配置(关闭不在使用的页面有助于提升SEO,关闭后直接在顶部导航删除对应的页面就行)
 	featurePages: {
-		anime: true, // 番剧页面开关
+		anime: false, // 番剧页面开关
 		diary: true, // 日记页面开关
 		friends: true, // 友链页面开关
 		projects: true, // 项目页面开关
-		skills: true, // 技能页面开关
+		skills: false, // 技能页面开关
 		timeline: true, // 时间线页面开关
 		albums: true, // 相册页面开关
-		devices: true, // 设备页面开关
+		devices: false, // 设备页面开关
 	},
 
 	// 顶栏标题配置
@@ -71,7 +71,7 @@ export const siteConfig: SiteConfig = {
 		// 注意：如果侧边栏配置启用了"both"双侧边栏，则无法使用文章列表"grid"网格（双列）布局
 		defaultMode: "list",
 		// 是否允许用户切换布局
-		allowSwitch: true,
+		allowSwitch: false,
 	},
 
 	// 标签样式配置
@@ -171,11 +171,11 @@ export const siteConfig: SiteConfig = {
 	generateOgImages: false, // 启用生成OpenGraph图片功能,注意开启后要渲染很长时间，不建议本地调试的时候开启
 	favicon: [
 		// 留空以使用默认 favicon
-		// {
-		//   src: '/favicon/icon.png',    // 图标文件路径
-		//   theme: 'light',              // 可选，指定主题 'light' | 'dark'
-		//   sizes: '32x32',              // 可选，图标大小
-		// }
+		 {
+		   src: '/favicon/home.png',    // 图标文件路径
+		   theme: 'light',              // 可选，指定主题 'light' | 'dark'
+		   sizes: '32x32',              // 可选，图标大小
+		 }
 	],
 
 	// 字体配置
@@ -185,16 +185,16 @@ export const siteConfig: SiteConfig = {
 		asciiFont: {
 			// 英文字体 - 优先级最高
 			// 指定为英文字体则无论字体包含多大范围，都只会保留 ASCII 字符子集
-			fontFamily: "ZenMaruGothic-Medium",
+			fontFamily: "LXGWWenKai-Regular",
 			fontWeight: "400",
-			localFonts: ["ZenMaruGothic-Medium.ttf"],
+			localFonts: ["LXGWWenKai-Regular.ttf"],
 			enableCompress: true, // 启用字体子集优化，减少字体文件大小
 		},
 		cjkFont: {
 			// 中日韩字体 - 作为回退字体
-			fontFamily: "萝莉体 第二版",
+			fontFamily: "LXGWWenKai-Regular",
 			fontWeight: "500",
-			localFonts: ["萝莉体 第二版.ttf"],
+			localFonts: ["LXGWWenKai-Regular.ttf"],
 			enableCompress: true, // 启用字体子集优化，减少字体文件大小
 		},
 	},
@@ -319,7 +319,7 @@ export const navBarConfig: NavBarConfig = {
 
 export const profileConfig: ProfileConfig = {
 	avatar: "assets/images/avatar.webp", // 相对于 /src 目录。如果以 '/' 开头，则相对于 /public 目录
-	name: "Matsuzaka Yuki",
+	name: "GGGuoshifu",
 	bio: "The world is big, you have to go and see",
 	typewriter: {
 		enable: true, // 启用个人简介打字机效果
@@ -603,7 +603,7 @@ export const sakuraConfig: SakuraConfig = {
 
 // Pio 看板娘配置
 export const pioConfig: import("./types/config").PioConfig = {
-	enable: true, // 启用看板娘
+	enable: false, // 启用看板娘
 	models: ["/pio/models/pio/model.json"], // 默认模型路径
 	position: "left", // 默认位置在右侧
 	width: 280, // 默认宽度
