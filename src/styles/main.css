@@ -12,7 +12,7 @@
 /* 导入 ZenMaruGothic-Medium 字体 */
 @font-face {
   font-family: "LXGWWenKai-Regular";
-  src: url("/assets/font/LXGWWenKai-Regular.ttf") format("ttf");
+  src: url("/assets/font/LXGWWenKai-Regular.woff2") format("woff2");
   font-weight: 500;
   font-display: swap;
 }
@@ -20,7 +20,7 @@
 /* 导入 萝莉体 第二版 字体 */
 @font-face {
   font-family: "LXGWWenKai-Regular";
-  src: url("/assets/font/LXGWWenKai-Regular.ttf") format("ttf");
+  src: url("/assets/font/LXGWWenKai-Regular.woff2") format("woff2");
   font-style: normal;
   font-weight: 400;
   font-display: swap;
