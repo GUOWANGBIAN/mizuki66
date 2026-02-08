@@ -344,7 +344,7 @@ export const permalinkConfig: PermalinkConfig = {
 	 * - %monthnum% : 2位月份 (01-12)
 	 * - %day% : 2位日期 (01-31)
 	 * - %hour% : 2位小时 (00-23)
-	 * - %minute% : 2位分钟 (00-59)
+	 * - %minute% : 2位分钟 (00-59) 
 	 * - %second% : 2位秒数 (00-59)
 	 * - %post_id% : 文章序号（按发布时间升序排列，最早的文章为1）
 	 * - %postname% : 文章文件名（slug）
