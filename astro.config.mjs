@@ -74,12 +74,16 @@ export default defineConfig({
 			],
 			defaultProps: {
 				wrap: true,
+				collapsed: true,
+				// 可选：自定义折叠按钮的提示文本（按需改）
+				collapsibleSummary: "点击展开代码块",
 				overridesByLang: {
 					shellsession: { showLineNumbers: false },
 					bash: { frame: "code" },
 					shell: { frame: "code" },
 					sh: { frame: "code" },
 					zsh: { frame: "code" },
+					log: { frame: "code" },
 				},
 			},
 			styleOverrides: {
