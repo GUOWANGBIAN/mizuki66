@@ -1,4 +1,4 @@
-# 🌸 Mizuki  
+# 🌸 Mizuki   
 ![Node.js >= 20](https://img.shields.io/badge/node.js-%3E%3D20-brightgreen) 
 ![pnpm >= 9](https://img.shields.io/badge/pnpm-%3E%3D9-blue) 
 ![Astro](https://img.shields.io/badge/Astro-5.15.3-orange)
@@ -6,8 +6,8 @@
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 ![Mizuki Preview](./README.webp)
-
-<table>
+ 
+<table> 
   <tr>
     <td><img alt="" src="docs/image/1.webp"></td>
     <td><img alt="" src="docs/image/2.webp"></td>
