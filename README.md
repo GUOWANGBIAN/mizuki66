@@ -10,7 +10,7 @@
 <table>  
   <tr> 
     <td><img alt="" src="docs/image/1.webp"></td>
-    <td><img alt="" src="docs/image/2.webp"></td>
+    <td><img alt="" src="docs/image/2.webp"></td> 
     <td><img alt="" src="docs/image/3.webp"></td>
   <tr>
   <tr>
