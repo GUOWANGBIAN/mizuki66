@@ -1,7 +1,6 @@
 ---
 import { getEntry, render } from "astro:content";
 import Markdown from "@components/misc/Markdown.astro";
-// import Icon from "../components/misc/Icon.astro";
 import { siteConfig } from "../config";
 import { getShuffledFriendsList } from "../data/friends";
 import I18nKey from "../i18n/i18nKey";
@@ -24,6 +23,7 @@ const friendsList = getShuffledFriendsList();
 
 // 获取所有标签
 const allTags = Array.from(new Set(friendsList.flatMap((item) => item.tags)));
+
 ---
 
 <MainGridLayout title={i18n(I18nKey.friends)} description={i18n(I18nKey.friends)}>
@@ -72,25 +72,7 @@ const allTags = Array.from(new Set(friendsList.flatMap((item) => item.tags)));
 					</div>
 				</div>
 
-				<!-- 标签筛选 -->
-				<div class="filter-container flex flex-wrap gap-2">
-					<button 
-						class="filter-tag active"
-						data-tag="all"
-					>
-						{i18n(I18nKey.friendsFilterAll)}
-					</button>
-					{allTags.map(tag => (
-						<button 
-							class="filter-tag"
-							data-tag={tag}
-						>
-							{tag}
-						</button>
-					))}
-				</div>
-			</div>
-
+				
 			<!-- 友链卡片网格 -->
 			<div id="friends-grid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mb-6">
 				{friendsList.map((item) => (
@@ -142,17 +124,6 @@ const allTags = Array.from(new Set(friendsList.flatMap((item) => item.tags)));
 								{item.desc}
 							</p>
 
-							<!-- 标签 -->
-							<div class="flex flex-wrap gap-2 mb-4">
-								{item.tags.map(tag => (
-									<span class="px-2 py-1 text-xs rounded-md 
-													bg-[var(--primary)]/10 text-[var(--primary)] 
-													font-medium">
-										{tag}
-									</span>
-								))}
-							</div>
-
 							<!-- 操作按钮 -->
 							<div class="flex gap-2">
 								<a 
@@ -203,6 +174,36 @@ const allTags = Array.from(new Set(friendsList.flatMap((item) => item.tags)));
 						d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
 				</svg>
 				<p class="text-black/50 dark:text-white/50 text-lg">{i18n(I18nKey.friendsNoResults)}</p>
+			</div>
+
+			<!-- 新增：提交PR添加友链区块 -->
+			<div class="mt-10 mb-8 p-6 rounded-xl border border-black/10 dark:border-white/10 bg-[var(--btn-regular-bg)]/50">
+				<h2 class="text-2xl font-bold text-black/90 dark:text-white/90 mb-4 flex items-center gap-2">
+					<svg class="w-6 h-6 text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+					</svg>
+					提交issue添加友链
+				</h2>
+				
+				<div class="space-y-4 text-black/80 dark:text-white/80">
+					<!-- 提交须知 -->
+					<div class="text-sm">
+						<p class="font-medium mb-2">📋 提交前请确认：</p>
+						<ul class="list-disc list-inside space-y-1 pl-2">
+							<li>站点链接可正常访问，无违规内容</li>
+							<li>Logo链接为640px规格的正方形图片，可直接访问</li>
+						</ul>
+					</div>
+
+					<!-- 提交步骤 -->
+					<div class="text-sm">
+						<p class="font-medium mb-2">🚀 提交步骤：</p>
+						<ol class="list-decimal list-inside space-y-1 pl-2">
+							<li>在本项目仓库中提交Issues</li>
+							<li>https://github.com/GUOWANGBIAN/mizuki66/issues/4</code></li>
+						</ol>
+					</div>
+				</div>
 			</div>
 
 			<!-- 说明文档 -->
@@ -286,5 +287,15 @@ const allTags = Array.from(new Set(friendsList.flatMap((item) => item.tags)));
 		color: white !important;
 		border-color: var(--primary) !important;
 		transform: translateY(-1px);
+	}
+
+	/* 新增：PR提交区块样式优化 */
+	pre {
+		tab-size: 2;
+		white-space: pre-wrap;
+		word-wrap: break-word;
+	}
+	code {
+		font-family: 'Consolas', 'Monaco', monospace;
 	}
 </style>
