@@ -88,6 +88,35 @@ function renderComponent(component: any, index: number, _components: any[]) {
 			})}
 		</div>
 	)}
+
+	<!-- ========== 右侧栏最底部双广告位（纯图片+原生卡片样式） ========== -->
+	<div class="flex flex-col w-full gap-4 mt-6">
+		<!-- 广告位 1 - 完全沿用Mizuki原生卡片样式 -->
+		<div class="widget card">
+			<a 
+				href="https://www.rainyun.com/qhgsf_" 
+				target="_blank" 
+				rel="noopener noreferrer"
+				class="block w-full"
+			>
+				<img src="/images/ads/rain.png"> <!-- 补全根路径，避免图片加载失败 -->
+
+			</a>
+		</div>
+
+		<!-- 广告位 2 - 完全沿用Mizuki原生卡片样式 -->
+		<div class="widget card">
+			<a 
+				href="https://cloud.zyidc.net/aff/ZESMZYKY" 
+				target="_blank" 
+				rel="noopener noreferrer"
+				class="block w-full"
+			>
+				<img src="/images/ads/ychl.png"><!-- 补全根路径，避免图片加载失败 -->
+				
+			</a>
+		</div>
+	</div>
 </div>
 
 <!-- 响应式样式和JavaScript -->
@@ -109,6 +138,15 @@ function renderComponent(component: any, index: number, _components: any[]) {
 		#sidebar {
 			display: var(--sidebar-desktop-display, block);
 		}
+	}
+
+	/* 广告图片交互优化（和主题卡片hover效果一致） */
+	.widget.card a img {
+		transition: transform 0.2s ease, box-shadow 0.2s ease;
+	}
+	.widget.card a:hover img {
+		transform: translateY(-2px);
+		box-shadow: var(--card-hover-shadow, 0 4px 12px rgba(0,0,0,0.08));
 	}
 </style>
 
