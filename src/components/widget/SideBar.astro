@@ -89,34 +89,29 @@ function renderComponent(component: any, index: number, _components: any[]) {
 		</div>
 	)}
 
-	<!-- ========== 右侧栏最底部双广告位（纯图片+原生卡片样式） ========== -->
-	<div class="flex flex-col w-full gap-4 mt-6">
-		<!-- 广告位 1 - 完全沿用Mizuki原生卡片样式 -->
-		<div class="widget card">
-			<a 
-				href="https://www.rainyun.com/qhgsf_" 
-				target="_blank" 
-				rel="noopener noreferrer"
-				class="block w-full"
-			>
-				<img src="/images/ads/rain.png"> <!-- 补全根路径，避免图片加载失败 -->
-
-			</a>
-		</div>
-
-		<!-- 广告位 2 - 完全沿用Mizuki原生卡片样式 -->
-		<div class="widget card">
-			<a 
-				href="https://cloud.zyidc.net/aff/ZESMZYKY" 
-				target="_blank" 
-				rel="noopener noreferrer"
-				class="block w-full"
-			>
-				<img src="/images/ads/ychl.png"><!-- 补全根路径，避免图片加载失败 -->
-				
-			</a>
-		</div>
-	</div>
+<!-- 赞助标（iframe + 叠加带链接的图片） -->
+<div class="card-base overflow-hidden mt-4" style="position: relative; height: 270px;">
+    <!-- 原有 iframe（作为背景） -->
+    <iframe
+        src=""
+        style="border:none; border-radius:8px; height:100%; width:100%;
+        transform: scale(1.0); transform-origin: top left;"
+    ></iframe>
+    
+    <!-- 带超链接的图片（叠加在 iframe 上） -->
+    <a 
+        href="https://curl.qcloud.com/lMROVhPT" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: block;"
+    >
+        <img 
+            src="/images/ads/500_500.png" 
+            alt="腾讯云推广"
+            style="border:none; border-radius:8px; height:100%; width:100%; object-fit: cover; opacity: 0.8;"
+        >
+    </a>
+</div>
 </div>
 
 <!-- 响应式样式和JavaScript -->
