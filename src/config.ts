@@ -650,5 +650,5 @@ export const umamiConfig = {
 	baseUrl: "https://api.umami.is", // Umami Cloud API地址
 	scripts: `
 <script defer src="XXXX.XXX" data-website-id="ABCD1234"></script>
-  `.trim(), // 上面填你要插入的Script,不用再去Layout中插入
+  `.trim(), // 上面填你要插入的Script,不用再去Layout中插入 
 } as const;
