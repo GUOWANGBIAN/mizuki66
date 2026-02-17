@@ -4,7 +4,18 @@ const robotsTxt = `
 User-agent: *
 Disallow: /
 Allow: /$
-Allow: /posts/
+Disallow: /about/
+Disallow: /albums/
+Disallow: /anime/
+Disallow: /archive/
+Disallow: /atom/
+Disallow: /devices/
+Disallow: /diary/
+Disallow: /friends/
+Disallow: /projects/
+Disallow: /rss/
+Disallow: /skills/
+Disallow: /posts/
 
 Sitemap: ${new URL("sitemap-index.xml", import.meta.env.SITE).href}
 `.trim();
