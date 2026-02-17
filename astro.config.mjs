@@ -192,5 +192,15 @@ export default defineConfig({
 				},
 			},
 		},
-	},
+	}, 
+	// 添加服务器配置（放在最后，在 vite 配置后面）
+	server: {
+		host: true, // 监听所有网络接口
+		port: 4321, // Astro 默认端口，可省略
+		allowedHosts: [
+			'localhost',
+			'127.0.0.1',
+			'::1'
+		]
+	}
 });

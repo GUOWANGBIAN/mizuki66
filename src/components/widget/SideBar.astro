@@ -19,8 +19,6 @@ interface Props {
 const { class: className, headings } = Astro.props;
 
 // 获取配置的组件列表
-// 在双侧边栏模式下，桌面端只获取左侧组件
-// 手机端仍然获取所有组件（不指定sidebar参数）以保持原有布局
 const isBothSidebarMode = Astro.props.isBothSidebarMode ?? false;
 const topComponents = isBothSidebarMode
 	? widgetManager.getComponentsByPosition("top", "left")
@@ -76,9 +74,10 @@ function renderComponent(component: any, index: number, _components: any[]) {
 		</div>
 	)}
 	
-	<!-- 粘性组件区域 -->
+	<!-- 粘性组件区域（分类+广告同步固定） -->
 	{stickyComponents.length > 0 && (
 		<div id="sidebar-sticky" class="transition-all duration-700 flex flex-col w-full gap-4 top-4 sticky top-4">
+			{/* 原有粘性组件（分类卡片等） */}
 			{stickyComponents.map((component, index) => {
 				const renderData = renderComponent(component, index, stickyComponents);
 				if (!renderData) return null;
@@ -86,32 +85,42 @@ function renderComponent(component: any, index: number, _components: any[]) {
 				const { Component, props } = renderData;
 				return <Component {...props} />;
 			})}
+
+			{/* ========== 响应式广告卡片：电脑端500_500 / 手机端470_250 ========== */}
+			<div class="card-base overflow-hidden" style="position: relative; height: 270px;">
+			    <iframe
+			        src=""
+			        style="border:none; border-radius:8px; height:100%; width:100%; transform: scale(1.0); transform-origin: top left;"
+			    ></iframe>
+			    <a 
+			        href="https://curl.qcloud.com/lMROVhPT" 
+			        target="_blank" 
+			        rel="noopener noreferrer"
+			        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: block;"
+			    >
+			        <!-- picture标签实现响应式图片切换 -->
+			        <picture>
+			            <!-- 电脑端（768px以上）显示500_500.png -->
+			            <source 
+			                media="(min-width: 768px)" 
+			                srcset="/images/ads/500_500.png"
+			            >
+			            <!-- 手机端（768px以下）显示470_250.png -->
+			            <source 
+			                media="(max-width: 767px)" 
+			                srcset="/images/ads/470_250.png"
+			            >
+			            <!-- 降级兜底（兼容所有浏览器） -->
+			            <img 
+			                src="/images/ads/470_250.png" 
+			                alt="腾讯云推广"
+			                style="border:none; border-radius:8px; height:100%; width:100%; object-fit: cover; opacity: 0.8; object-position: center;"
+			            >
+			        </picture>
+			    </a>
+			</div>
 		</div>
 	)}
-
-<!-- 赞助标（iframe + 叠加带链接的图片） -->
-<div class="card-base overflow-hidden mt-4" style="position: relative; height: 270px;">
-    <!-- 原有 iframe（作为背景） -->
-    <iframe
-        src=""
-        style="border:none; border-radius:8px; height:100%; width:100%;
-        transform: scale(1.0); transform-origin: top left;"
-    ></iframe>
-    
-    <!-- 带超链接的图片（叠加在 iframe 上） -->
-    <a 
-        href="https://curl.qcloud.com/lMROVhPT" 
-        target="_blank" 
-        rel="noopener noreferrer"
-        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: block;"
-    >
-        <img 
-            src="/images/ads/500_500.png" 
-            alt="腾讯云推广"
-            style="border:none; border-radius:8px; height:100%; width:100%; object-fit: cover; opacity: 0.8;"
-        >
-    </a>
-</div>
 </div>
 
 <!-- 响应式样式和JavaScript -->
@@ -135,13 +144,22 @@ function renderComponent(component: any, index: number, _components: any[]) {
 		}
 	}
 
-	/* 广告图片交互优化（和主题卡片hover效果一致） */
-	.widget.card a img {
+	/* 广告图片交互优化 */
+	.widget.card a img,
+	.card-base a img {
 		transition: transform 0.2s ease, box-shadow 0.2s ease;
 	}
-	.widget.card a:hover img {
+	.widget.card a:hover img,
+	.card-base a:hover img {
 		transform: translateY(-2px);
 		box-shadow: var(--card-hover-shadow, 0 4px 12px rgba(0,0,0,0.08));
+	}
+
+	/* 可选：优化手机端广告高度（适配470_250图片比例） */
+	@media (max-width: 767px) {
+		.card-base.overflow-hidden {
+			height: 100% !important; /* 适配470_250的宽高比 */
+		}
 	}
 </style>
 
@@ -161,10 +179,8 @@ function renderComponent(component: any, index: number, _components: any[]) {
 			this.updateResponsiveDisplay();
 			window.addEventListener('resize', () => this.updateResponsiveDisplay());
 			
-			// 监听SWUP内容替换事件
 			if (typeof window !== 'undefined' && window.swup) {
 				window.swup.hooks.on('content:replace', () => {
-					// 延迟执行以确保DOM已更新
 					setTimeout(() => {
 						this.updateResponsiveDisplay();
 					}, 100);
@@ -184,7 +200,6 @@ function renderComponent(component: any, index: number, _components: any[]) {
 				deviceType = 'desktop';
 			}
 			
-			// 根据设备类型判断是否显示侧边栏
 			let shouldShow = false;
 			if (deviceType === 'mobile') {
 				shouldShow = mobileShowSidebar;
@@ -195,7 +210,6 @@ function renderComponent(component: any, index: number, _components: any[]) {
 			}
 			
 			const sidebar = document.getElementById('sidebar');
-			
 			if (sidebar) {
 				sidebar.style.setProperty(
 					`--sidebar-${deviceType}-display`, 
@@ -205,6 +219,5 @@ function renderComponent(component: any, index: number, _components: any[]) {
 		}
 	}
 	
-	// 初始化侧边栏管理器
 	new SidebarManager();
 </script>
