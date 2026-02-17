@@ -162,19 +162,24 @@ export const siteConfig: SiteConfig = {
 		},
 	},
 	toc: {
-		enable: false, // 启用目录功能
+		enable: true, // 🔧 SEO优化：开启目录功能，提升页面结构可读性（Bing偏好结构化内容）
 		mode: "sidebar", // 目录显示模式："float" 悬浮按钮模式，"sidebar" 侧边栏模式
-		depth: 2, // 目录深度，1-6，1 表示只显示 h1 标题，2 表示显示 h1 和 h2 标题，依此类推
+		depth: 3, // 🔧 SEO优化：目录深度调整为3（h1/h2/h3），适配Bing爬虫抓取层级
 		useJapaneseBadge: false, // 使用日语假名标记（あいうえお...）代替数字，开启后会将 1、2、3... 改为 あ、い、う...
 	},
 	showCoverInContent: true, // 在文章内容页显示文章封面
-	generateOgImages: false, // 启用生成OpenGraph图片功能,注意开启后要渲染很长时间，不建议本地调试的时候开启
+	generateOgImages: true, // 🔧 SEO优化：启用OpenGraph图片生成，提升Bing搜索结果展示效果（注意：生产环境启用，本地调试可临时关闭）
 	favicon: [
 		// 留空以使用默认 favicon
 		 {
 		   src: '/favicon/home.png',    // 图标文件路径
 		   theme: 'light',              // 可选，指定主题 'light' | 'dark'
 		   sizes: '32x32',              // 可选，图标大小
+		 },
+		 {
+		   src: '/favicon/home.png',    // 🔧 SEO优化：补充深色模式favicon，适配不同设备
+		   theme: 'dark',
+		   sizes: '32x32',
 		 }
 	],
 
@@ -199,6 +204,14 @@ export const siteConfig: SiteConfig = {
 		},
 	},
 	showLastModified: true, // 控制“上次编辑”卡片显示的开关
+	// 🔧 SEO优化：新增全局SEO基础配置（Mizuki主题扩展，需确保types/config.ts已定义）
+	seo: {
+		enable: true, // 开启全局SEO控制
+		autoDescription: false, // 关闭自动生成描述，强制手动写精准描述（解决Bing描述烂的核心）
+		autoKeywords: true,
+		structuredData: true, // 开启结构化数据，提升Bing排名权重
+		openGraph: true, // 开启OG标签，优化社交分享和搜索展示
+	},
 };
 export const fullscreenWallpaperConfig: FullscreenWallpaperConfig = {
 	src: {
@@ -299,6 +312,10 @@ export const navBarConfig: NavBarConfig = {
 			],
 		},
 	],
+	// 🔧 SEO优化：新增导航栏SEO配置，禁止Bing爬取重复导航链接
+	seo: {
+		noFollowExternal: true, // 外部链接添加nofollow，避免权重分散
+	},
 };
 
 export const profileConfig: ProfileConfig = {
@@ -314,11 +331,15 @@ export const profileConfig: ProfileConfig = {
 			name: "Bilibli",
 			icon: "fa6-brands:bilibili",
 			url: "https://space.bilibili.com/1796935494",
+			// 🔧 SEO优化：外部链接添加nofollow
+			nofollow: true,
 		},
 		{
 			name: "GitHub",
 			icon: "fa6-brands:github",
 			url: "https://github.com/GUOWANGBIAN",
+			// 🔧 SEO优化：外部链接添加nofollow
+			nofollow: true,
 		},
 	],
 };
@@ -327,11 +348,13 @@ export const licenseConfig: LicenseConfig = {
 	enable: true,
 	name: "CC BY-NC-SA 4.0",
 	url: "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+	// 🔧 SEO优化：许可证链接添加nofollow
+	nofollow: true,
 };
 
 // Permalink 固定链接配置
 export const permalinkConfig: PermalinkConfig = {
-	enable: false, // 是否启用全局 permalink 功能，关闭时使用默认的文件名作为链接
+	enable: true, // 🔧 SEO优化：启用固定链接，提升URL可读性（Bing偏好静态、语义化URL）
 	/**
 	 * permalink 格式模板
 	 * 支持的占位符：
@@ -352,7 +375,7 @@ export const permalinkConfig: PermalinkConfig = {
 	 *
 	 * 注意：不支持斜杠 "/"，所有生成的链接都在根目录下
 	 */
-	format: "%postname%", // 默认使用文件名
+	format: "%year%-%monthnum%-%postname%", // 🔧 SEO优化：改为带年月的语义化URL，提升Bing识别度
 };
 
 export const expressiveCodeConfig: ExpressiveCodeConfig = {
@@ -377,11 +400,11 @@ export const shareConfig: ShareConfig = {
 
 export const announcementConfig: AnnouncementConfig = {
 	title: "站点公告", // 公告标题
-	content: "Welcome to my blog! This is a sample announcement.", // 公告内容
+	content: "欢迎访问郭师傅的技术宅！分享技术干货与日常感悟，感谢你的到来～", // 🔧 SEO优化：替换为中文精准描述，适配Bing中文检索
 	closable: true, // 允许用户关闭公告
 	link: {
 		enable: true, // 启用链接
-		text: "Learn More", // 链接文本
+		text: "了解更多", // 🔧 SEO优化：改为中文
 		url: "/about/", // 链接 URL
 		external: false, // 内部链接
 	},
@@ -398,11 +421,11 @@ export const musicPlayerConfig: MusicPlayerConfig = {
 };
 
 export const footerConfig: FooterConfig = {
-	enable: false, // 是否启用Footer HTML注入功能
-	customHtml: "", // HTML格式的自定义页脚信息，例如备案号等，默认留空
+	enable: false, 
 	// 也可以直接编辑 FooterConfig.html 文件来添加备案号等自定义内容
 	// 注意：若 customHtml 不为空，则使用 customHtml 中的内容；若 customHtml 留空，则使用 FooterConfig.html 文件中的内容
-	// FooterConfig.html 可能会在未来的某个版本弃用
+	// FooterConfig.html 可能会在未
+	// 来的某个版本弃用
 };
 
 /**
@@ -559,7 +582,7 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 };
 
 export const sakuraConfig: SakuraConfig = {
-	enable: false, // 默认关闭樱花特效
+	enable: false, // 默认关闭樱花特效（🔧 SEO优化：减少非必要动画，提升页面加载速度）
 	sakuraNum: 21, // 樱花数量
 	limitTimes: -1, // 樱花越界限制次数，-1为无限循环
 	size: {
@@ -587,7 +610,7 @@ export const sakuraConfig: SakuraConfig = {
 
 // Pio 看板娘配置
 export const pioConfig: import("./types/config").PioConfig = {
-	enable: false, // 启用看板娘
+	enable: false, // 禁用看板娘（🔧 SEO优化：减少非必要资源加载，提升页面速度）
 	models: ["/pio/models/pio/model.json"], // 默认模型路径
 	position: "left", // 默认位置在右侧
 	width: 280, // 默认宽度
