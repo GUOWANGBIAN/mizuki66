@@ -4,6 +4,7 @@ const robotsTxt = `
 User-agent: *
 Disallow: /
 Allow: /$
+Disallow: /_astro/
 Disallow: /about/
 Disallow: /albums/
 Disallow: /anime/
