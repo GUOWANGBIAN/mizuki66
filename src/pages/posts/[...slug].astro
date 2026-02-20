@@ -294,43 +294,53 @@ const jsonLd = {
                         <Content />
                     </Markdown>
                 )
+                
             }
 
-            {shareConfig.enable && (
-                <div id="share-component" class:list={["p-6 bg-[var(--license-block-bg)] rounded-xl mb-6 onload-animation", { "encrypted-hidden": isEncrypted }]}>
-                    <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-                        <div class="flex items-center gap-3 flex-1">
-                            <div class="flex items-center justify-center h-12 w-12 rounded-lg bg-[var(--enter-btn-bg)]">
-                                <Icon
-                                    name="material-symbols:share"
-                                    class="text-3xl text-[var(--primary)]"
-                                />
-                            </div>
-                            <div class="flex flex-col gap-1">
-                                <div class="text-[1.0rem] leading-tight text-black/75 dark:text-white/75">
-                                    {i18n(I18nKey.shareOnSocial)}
-                                </div>
-                                <p class="text-[0.8rem] leading-tight text-black/75 dark:text-white/75">
-                                    {i18n(I18nKey.shareOnSocialDescription)}
-                                </p>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <SharePoster
-                                client:load
-                                title={entry.data.title}
-                                author={entry.data.author || profileConfig.name}
-                                description={entry.data.description || ""}
-                                pubDate={formatDateToYYYYMMDD(entry.data.published)}
-                                coverImage={posterCoverUrl}
-                                url={Astro.url.toString()}
-                                siteTitle={siteConfig.title}
-                                avatar={posterAvatarUrl}
-                            />
-                        </div>
-                    </div>
+
+
+{shareConfig.enable && (
+    <div id="share-component" class:list={["p-6 bg-[var(--license-block-bg)] rounded-xl mb-6 onload-animation", { "encrypted-hidden": isEncrypted }]}>
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3 flex-1">
+                <div class="flex items-center justify-center h-12 w-12 rounded-lg bg-[var(--enter-btn-bg)]">
+                    <Icon
+                        name="material-symbols:share"
+                        class="text-3xl text-[var(--primary)]"
+                    />
                 </div>
-            )}
+                <div class="flex flex-col gap-1">
+                    <div class="text-[1.0rem] leading-tight text-black/75 dark:text-white/75">
+                        {i18n(I18nKey.shareOnSocial)}
+                    </div>
+                    <p class="text-[0.8rem] leading-tight text-black/75 dark:text-white/75">
+                        {i18n(I18nKey.shareOnSocialDescription)}
+                    </p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <!-- 调整后的赞助按钮 - 样式与分享区域完全统一 -->
+                <a href="/sponsors/" class="group flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-[var(--enter-btn-bg)] hover:bg-[var(--btn-regular-bg-hover)] active:bg-[var(--btn-regular-bg-active)] text-[var(--primary)] dark:text-[var(--primary)] text-sm font-medium transition-all active:scale-95">
+                    <!-- 移除爱心图标，只保留文字 -->
+                    <span class="text-base">赞助</span>
+                </a>
+                <SharePoster
+                    client:load
+                    title={entry.data.title}
+                    author={entry.data.author || profileConfig.name}
+                    description={entry.data.description || ""}
+                    pubDate={formatDateToYYYYMMDD(entry.data.published)}
+                    coverImage={posterCoverUrl}
+                    url={Astro.url.toString()}
+                    siteTitle={siteConfig.title}
+                    avatar={posterAvatarUrl}
+                />
+            </div>
+        </div>
+    </div>
+)}
+
+
 
             {licenseConfig.enable && (
                 <div id="license-component" class:list={["encrypted-hidden-wrapper", { "encrypted-hidden": isEncrypted }]}>
@@ -346,8 +356,10 @@ const jsonLd = {
                 />
                 </div>
             )}
+
         </div>
     </div>
+     
 
     <!-- 评论 -->
     <Comment post={entry} />

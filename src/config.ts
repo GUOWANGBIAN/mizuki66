@@ -309,6 +309,11 @@ export const navBarConfig: NavBarConfig = {
 					url: "/timeline/",
 					icon: "material-symbols:timeline",
 				},
+				{
+					name: "封面制作",
+					url: "/cover/",
+					icon: "material-symbols:brush",
+				},
 			],
 		},
 	],
@@ -354,7 +359,7 @@ export const licenseConfig: LicenseConfig = {
 
 // Permalink 固定链接配置
 export const permalinkConfig: PermalinkConfig = {
-	enable: true, // 🔧 SEO优化：启用固定链接，提升URL可读性（Bing偏好静态、语义化URL）
+	enable: false, // 🔧 SEO优化：启用固定链接，提升URL可读性（Bing偏好静态、语义化URL）
 	/**
 	 * permalink 格式模板
 	 * 支持的占位符：

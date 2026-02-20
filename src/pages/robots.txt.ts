@@ -16,7 +16,7 @@ Disallow: /friends/
 Disallow: /projects/
 Disallow: /rss/
 Disallow: /skills/
-Disallow: /posts/
+Allow: /posts/
 
 Sitemap: ${new URL("sitemap-index.xml", import.meta.env.SITE).href}
 `.trim();
