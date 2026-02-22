@@ -21,7 +21,7 @@
 		"lint": "eslint ./src --fix",
 		"preinstall": "npx only-allow pnpm",
 		"compress-fonts": "node scripts/compress-fonts.js",
-		"test-font-compression": "node scripts/test-font-compression.js"
+		"test-font-compression": "node scripts/test-font-compression.js",
 		"indexnow": "curl \"https://api.indexnow.org/IndexNow?key=ff275a61484b4a81bf85b2de796fedf4&host=www.mgstudio.icu&url=https://www.mgstudio.icu/sitemap-0.xml""
 	},
 	"dependencies": {
