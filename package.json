@@ -22,7 +22,8 @@
 		"preinstall": "npx only-allow pnpm",
 		"compress-fonts": "node scripts/compress-fonts.js",
 		"test-font-compression": "node scripts/test-font-compression.js",
-		"indexnow": "curl \"https://api.indexnow.org/IndexNow?key=ff275a61484b4a81bf85b2de796fedf4&host=www.mgstudio.icu&url=https://www.mgstudio.icu/sitemap-0.xml\""
+		"indexnow": "curl \"https://api.indexnow.org/IndexNow?key=ff275a61484b4a81bf85b2de796fedf4&host=www.mgstudio.icu&url=https://www.mgstudio.icu/sitemap-0.xml\"",
+		"index": "node scripts/indexnow-push.js"
 	},
 	"dependencies": {
 		"@astrojs/check": "^0.9.6",
