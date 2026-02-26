@@ -2,21 +2,7 @@ import type { APIRoute } from "astro";
 
 const robotsTxt = `
 User-agent: *
-Disallow: /
-Allow: /$
 Disallow: /_astro/
-Disallow: /about/
-Disallow: /albums/
-Disallow: /anime/
-Disallow: /archive/
-Disallow: /atom/
-Disallow: /devices/
-Disallow: /diary/
-Disallow: /friends/
-Disallow: /projects/
-Disallow: /rss/
-Disallow: /skills/
-Allow: /posts/
 
 Sitemap: ${new URL("sitemap-index.xml", import.meta.env.SITE).href}
 `.trim();
