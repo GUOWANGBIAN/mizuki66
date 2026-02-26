@@ -204,14 +204,6 @@ export const siteConfig: SiteConfig = {
 		},
 	},
 	showLastModified: true, // 控制“上次编辑”卡片显示的开关
-	// 🔧 SEO优化：新增全局SEO基础配置（Mizuki主题扩展，需确保types/config.ts已定义）
-	seo: {
-		enable: true, // 开启全局SEO控制
-		autoDescription: false, // 关闭自动生成描述，强制手动写精准描述（解决Bing描述烂的核心）
-		autoKeywords: true,
-		structuredData: true, // 开启结构化数据，提升Bing排名权重
-		openGraph: true, // 开启OG标签，优化社交分享和搜索展示
-	},
 };
 export const fullscreenWallpaperConfig: FullscreenWallpaperConfig = {
 	src: {
@@ -317,10 +309,6 @@ export const navBarConfig: NavBarConfig = {
 			],
 		},
 	],
-	// 🔧 SEO优化：新增导航栏SEO配置，禁止Bing爬取重复导航链接
-	seo: {
-		noFollowExternal: true, // 外部链接添加nofollow，避免权重分散
-	},
 };
 
 export const profileConfig: ProfileConfig = {
@@ -336,15 +324,11 @@ export const profileConfig: ProfileConfig = {
 			name: "Bilibli",
 			icon: "fa6-brands:bilibili",
 			url: "https://space.bilibili.com/1796935494",
-			// 🔧 SEO优化：外部链接添加nofollow
-			nofollow: true,
 		},
 		{
 			name: "GitHub",
 			icon: "fa6-brands:github",
 			url: "https://github.com/GUOWANGBIAN",
-			// 🔧 SEO优化：外部链接添加nofollow
-			nofollow: true,
 		},
 	],
 };
@@ -353,13 +337,11 @@ export const licenseConfig: LicenseConfig = {
 	enable: true,
 	name: "CC BY-NC-SA 4.0",
 	url: "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-	// 🔧 SEO优化：许可证链接添加nofollow
-	nofollow: true,
 };
 
 // Permalink 固定链接配置
 export const permalinkConfig: PermalinkConfig = {
-	enable: false, // 🔧 SEO优化：启用固定链接，提升URL可读性（Bing偏好静态、语义化URL）
+	enable: false,
 	/**
 	 * permalink 格式模板
 	 * 支持的占位符：
