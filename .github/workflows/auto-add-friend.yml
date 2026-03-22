@@ -100,5 +100,5 @@ export function getShuffledFriendsList(): FriendItem[] {
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
-              body: "✅ **友链已自动添加成功！**\n\n已写入：`src/data/friends.ts`\nID：自动分配\n标签：已格式化\n\n等待自动部署后生效～"
+              body: "✅ **友链已自动添加成功！**\n\n已写入：`src/data/friends.ts`\nID：自动分配\n标签：已格式化\n\n等待自动部署后生效。"
             })
