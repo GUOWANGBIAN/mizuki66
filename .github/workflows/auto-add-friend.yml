@@ -1,19 +1,36 @@
-name: Auto Add Friend
+name: Auto Add Friend Link
+
 on:
   issues:
     types: [opened]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  issues: write
 
 jobs:
   add-friend:
     if: contains(github.event.issue.labels.*.name, '友链')
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+
       - name: Parse Issue Form
         id: parse
         uses: zzzgydi/issue-form-parser@v1
+
       - name: Update friends.ts
         run: |
           NAME="${{ steps.parse.outputs.name }}"
@@ -21,10 +38,13 @@ jobs:
           DESC="${{ steps.parse.outputs.desc }}"
           SITEURL="${{ steps.parse.outputs.siteurl }}"
           TAGS="${{ steps.parse.outputs.tags }}"
+
           TAGS_JSON=$(echo "$TAGS" | tr ',' '\n' | sed -e 's/^ *//' -e 's/ *$//' | jq -R . | jq -s .)
           FILE="src/data/friends.ts"
+
           MAX_ID=$(grep -oP 'id:\s*\K\d+' $FILE | sort -n | tail -1)
           if [ -z "$MAX_ID" ]; then NEW_ID=1; else NEW_ID=$((MAX_ID + 1)); fi
+
           NEW_ITEM="	{
 		id: $NEW_ID,
 		title: \"$NAME\",
@@ -33,7 +53,9 @@ jobs:
 		siteurl: \"$SITEURL\",
 		tags: $TAGS_JSON,
 	},"
+
           content=$(sed -n '/export const friendsData: FriendItem\[] = \[/,/];/p' $FILE | grep -v "export const" | grep -v "^];$")
+
           echo "// 友情链接数据配置
 // 用于管理友情链接页面的数据
 
@@ -52,12 +74,10 @@ $content
 $NEW_ITEM
 ];
 
-// 获取所有友情链接数据
 export function getFriendsList(): FriendItem[] {
 	return friendsData;
 }
 
-// 获取随机排序的友情链接数据
 export function getShuffledFriendsList(): FriendItem[] {
 	const shuffled = [...friendsData];
 	for (let i = shuffled.length - 1; i > 0; i--) {
@@ -66,14 +86,16 @@ export function getShuffledFriendsList(): FriendItem[] {
 	}
 	return shuffled;
 }" > $FILE
-      - name: Commit Changes
+
+      - name: Commit changes
         uses: EndBug/add-and-commit@v9
         with:
           message: "feat: add friend ${{ steps.parse.outputs.name }}"
           committer_name: GitHub Actions
           committer_email: actions@github.com
           add: src/data/friends.ts
-      - name: Reply to Issue
+
+      - name: Reply to issue
         uses: actions/github-script@v7
         with:
           script: |
@@ -81,5 +103,5 @@ export function getShuffledFriendsList(): FriendItem[] {
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
-              body: "✅ Friend added successfully!"
+              body: "✅ **友链已自动添加成功！**\n\n已写入：src/data/friends.ts\nID：自动分配\n等待部署后生效～"
             })
