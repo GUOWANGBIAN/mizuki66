@@ -1,4 +1,4 @@
-name: Auto Add Friend Link
+name: Auto Add Friend
 
 on:
   issues:
@@ -12,26 +12,29 @@ jobs:
   add-friend:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
-      # 直接解析 Issue 内容（不使用第三方 Action）
-      - name: Parse issue form data
+      - name: Parse Issue Data
         id: parse
         run: |
           body="${{ github.event.issue.body }}"
-          extract() {
-            echo "$body" | awk -v title="$1" 'BEGIN{found=0} {if(found){print;exit}} if($0~title){found=1}' | sed 's/^[ \t]*//g'
+          get() {
+            echo "$body" | grep -A1 "$1:" | tail -n1 | sed 's/^[ \t]*//g'
           }
-          echo "name=$(extract "网站名称")" >> $GITHUB_OUTPUT
-          echo "imgurl=$(extract "头像 / Logo 地址")" >> $GITHUB_OUTPUT
-          echo "desc=$(extract "网站描述")" >> $GITHUB_OUTPUT
-          echo "siteurl=$(extract "网站地址")" >> $GITHUB_OUTPUT
-          echo "tags=$(extract "标签")" >> $GITHUB_OUTPUT
+          NAME=$(get "网站名称")
+          IMGURL=$(get "头像 / Logo 地址")
+          DESC=$(get "网站描述")
+          SITEURL=$(get "网站地址")
+          TAGS=$(get "标签")
+          echo "name=$NAME" >> $GITHUB_OUTPUT
+          echo "imgurl=$IMGURL" >> $GITHUB_OUTPUT
+          echo "desc=$DESC" >> $GITHUB_OUTPUT
+          echo "siteurl=$SITEURL" >> $GITHUB_OUTPUT
+          echo "tags=$TAGS" >> $GITHUB_OUTPUT
 
-      # 生成友链条目
       - name: Update friends.ts
         run: |
           NAME="${{ steps.parse.outputs.name }}"
@@ -40,48 +43,39 @@ jobs:
           SITEURL="${{ steps.parse.outputs.siteurl }}"
           TAGS="${{ steps.parse.outputs.tags }}"
 
-          # 格式化标签
-          TAGS_ARR=$(echo "$TAGS" | tr ',' '\n' | sed 's/^ *//;s/ *$//' | xargs -I {} echo '"{}"' | paste -sd "," -)
-          TAGS_ARR="[${TAGS_ARR}]"
+          TAGS_JSON=$(echo "$TAGS" | tr ',' '\n' | sed 's/^ *//g' | jq -R . | jq -s .)
+          FILE="src/data/friends.ts"
 
-          FILE=src/data/friends.ts
-
-          # 自动 ID 自增
           MAX_ID=$(grep -oP 'id:\s*\K\d+' $FILE | sort -n | tail -1)
-          if [ -z "$MAX_ID" ]; then NEW_ID=1; else NEW_ID=$((MAX_ID + 1)); fi
+          NEW_ID=$(( ${MAX_ID:-0} + 1 ))
 
-          # 生成新条目
           NEW_ITEM="	{
 		id: $NEW_ID,
 		title: \"$NAME\",
 		imgurl: \"$IMGURL\",
 		desc: \"$DESC\",
 		siteurl: \"$SITEURL\",
-		tags: $TAGS_ARR,
+		tags: $TAGS_JSON,
 	},"
 
-          # 插入到 friendsData 数组
-          awk -v item="$NEW_ITEM" '
-            /export const friendsData/ { print; in_array=1; next }
-            in_array && /^\];/ { print item; print "]"; in_array=0; next }
-            { print }
+          awk -v n="$NEW_ITEM" '
+            /export const friendsData/ {print; inlist=1; next}
+            inlist && /^\];/ {print n; print "]"; inlist=0; next}
+            {print}
           ' $FILE > tmp && mv tmp $FILE
 
-      # 提交到仓库
-      - name: Commit and push
+      - name: Commit
         uses: EndBug/add-and-commit@v9
         with:
-          message: "✅ Auto add friend: ${{ steps.parse.outputs.name }}"
+          message: "feat: add friend ${{ steps.parse.outputs.name }}"
           committer_name: GitHub Actions
-          committer_email:actions@github.com
+          committer_email: actions@github.com
           add: src/data/friends.ts
 
-      # 回复并关闭 Issue
-      - name: Reply and close issue
+      - name: Reply & Close
         uses: peter-evans/close-issue@v3
         with:
           comment: |
-            ✅ **友链已自动添加成功！**
+            ✅ 友链已自动添加成功！
             已写入：src/data/friends.ts
-            自动 ID：${{ steps.parse.outputs.id }}
             部署后生效～
