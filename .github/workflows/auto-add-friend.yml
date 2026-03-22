@@ -1,0 +1,104 @@
+name: 自动添加友链到 friendsData
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  add-friend:
+    if: contains(github.event.issue.labels.*.name, '友链')
+    runs-on: ubuntu-latest
+    steps:
+      - name: 拉取代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 解析 Issue 表单
+        id: parse
+        uses: zzzgydi/issue-form-parser@v1
+
+      - name: 自动写入 friends.ts
+        run: |
+          # 读取用户输入
+          NAME="${{ steps.parse.outputs.name }}"
+          IMGURL="${{ steps.parse.outputs.imgurl }}"
+          DESC="${{ steps.parse.outputs.desc }}"
+          SITEURL="${{ steps.parse.outputs.siteurl }}"
+          TAGS="${{ steps.parse.outputs.tags }}"
+
+          # 格式化标签为 ["a", "b"]
+          TAGS_JSON=$(echo "$TAGS" | tr ',' '\n' | sed -e 's/^ *//' -e 's/ *$//' | jq -R . | jq -s .)
+
+          # 文件路径
+          FILE="src/data/friends.ts"
+
+          # 自动获取最大 ID
+          MAX_ID=$(grep -oP 'id:\s*\K\d+' $FILE | sort -n | tail -1)
+          if [ -z "$MAX_ID" ]; then NEW_ID=1; else NEW_ID=$((MAX_ID + 1)); fi
+
+          # 生成新友链（完全匹配你的格式）
+          NEW_ITEM="	{
+		id: $NEW_ID,
+		title: \"$NAME\",
+		imgurl: \"$IMGURL\",
+		desc: \"$DESC\",
+		siteurl: \"$SITEURL\",
+		tags: $TAGS_JSON,
+	},"
+
+          # 读取 friendsData 数组
+          content=$(sed -n '/export const friendsData: FriendItem\[] = \[/,/];/p' $FILE | grep -v "export const" | grep -v "^];$")
+
+          # 重新构建文件
+          echo "// 友情链接数据配置
+// 用于管理友情链接页面的数据
+
+export interface FriendItem {
+	id: number;
+	title: string;
+	imgurl: string;
+	desc: string;
+	siteurl: string;
+	tags: string[];
+}
+
+// 友情链接数据
+export const friendsData: FriendItem[] = [
+$content
+$NEW_ITEM
+];
+
+// 获取所有友情链接数据
+export function getFriendsList(): FriendItem[] {
+	return friendsData;
+}
+
+// 获取随机排序的友情链接数据
+export function getShuffledFriendsList(): FriendItem[] {
+	const shuffled = [...friendsData];
+	for (let i = shuffled.length - 1; i > 0; i--) {
+		const j = Math.floor(Math.random() * (i + 1));
+		[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+	}
+	return shuffled;
+}" > $FILE
+
+      - name: 提交到 GitHub
+        uses: EndBug/add-and-commit@v9
+        with:
+          message: "✅ 自动添加友链：${{ steps.parse.outputs.name }}"
+          committer_name: GitHub Actions
+          committer_email: actions@github.com
+          add: src/data/friends.ts
+
+      - name: 回复用户
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: "✅ **友链已自动添加成功！**\n\n已写入：`src/data/friends.ts`\nID：自动分配\n标签：已格式化\n\n等待自动部署后生效～"
+            })
