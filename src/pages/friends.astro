@@ -71,15 +71,15 @@ const allTags = Array.from(new Set(friendsList.flatMap((item) => item.tags)));
 						</svg>
 					</div>
 				</div>
+			</div>
 
-				
-			<!-- 友链卡片网格 -->
-			<div id="friends-grid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mb-6">
+			<!-- 友链卡片网格 → 已修改为 2列布局 -->
+			<div id="friends-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
 				{friendsList.map((item) => (
 					<div 
 						class="friend-card group relative bg-transparent rounded-xl border border-black/10 dark:border-white/10
-								 overflow-hidden transition-all duration-300
-								 hover:shadow-xl hover:-translate-y-1"
+							 overflow-hidden transition-all duration-300
+							 hover:shadow-xl hover:-translate-y-1"
 						data-title={item.title.toLowerCase()}
 						data-desc={item.desc.toLowerCase()}
 						data-tags={item.tags.join(',')}
@@ -90,21 +90,21 @@ const allTags = Array.from(new Set(friendsList.flatMap((item) => item.tags)));
 							<div class="flex items-start gap-4 mb-4">
 								<!-- 网站图标 -->
 								<div class="w-16 h-16 flex-shrink-0 rounded-xl overflow-hidden 
-												bg-[var(--btn-regular-bg)] 
-												ring-2 ring-transparent
-												transition-all duration-300">
+											bg-[var(--btn-regular-bg)] 
+											ring-2 ring-transparent
+											transition-all duration-300">
 									<img 
 										src={item.imgurl} 
 										alt={item.title}
 										class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300"
 										loading="lazy"
-									/>
+										/>
 								</div>
 
 								<!-- 标题和链接 -->
 								<div class="flex-1 min-w-0">
 									<h3 class="text-xl font-bold text-black/90 dark:text-white/90 mb-1 truncate
-												 group-hover:text-[var(--primary)] transition-colors duration-200">
+											group-hover:text-[var(--primary)] transition-colors duration-200">
 										{item.title}
 									</h3>
 									<a 
@@ -112,7 +112,7 @@ const allTags = Array.from(new Set(friendsList.flatMap((item) => item.tags)));
 										target="_blank" 
 										rel="noopener noreferrer"
 										class="text-xs text-black/50 dark:text-white/50 hover:text-[var(--primary)] 
-												 truncate block transition-colors duration-200"
+											truncate block transition-colors duration-200"
 									>
 										{new URL(item.siteurl).hostname}
 									</a>
@@ -131,10 +131,10 @@ const allTags = Array.from(new Set(friendsList.flatMap((item) => item.tags)));
 									target="_blank"
 									rel="noopener noreferrer"
 									class="flex-1 flex items-center justify-center gap-2 px-4 py-2 
-											 rounded-lg bg-[var(--primary)] text-white 
-											 hover:bg-[var(--primary)]/90 
-											 active:scale-95 transition-all duration-200
-											 font-medium text-sm"
+											rounded-lg bg-[var(--primary)] text-white 
+											hover:bg-[var(--primary)]/90 
+											active:scale-95 transition-all duration-200
+											font-medium text-sm"
 								>
 									<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
@@ -144,10 +144,10 @@ const allTags = Array.from(new Set(friendsList.flatMap((item) => item.tags)));
 								</a>
 								<button 
 									class="copy-link-btn px-3 py-2 rounded-lg 
-											 bg-[var(--btn-regular-bg)] 
-											 hover:bg-[var(--btn-regular-bg-hover)] 
-											 active:scale-95 transition-all duration-200
-											 text-black/70 dark:text-white/70"
+											bg-[var(--btn-regular-bg)] 
+											hover:bg-[var(--btn-regular-bg-hover)] 
+											active:scale-95 transition-all duration-200
+											text-black/70 dark:text-white/70"
 									data-url={item.siteurl}
 									title={i18n(I18nKey.friendsCopyLink)}
 								>
@@ -161,7 +161,7 @@ const allTags = Array.from(new Set(friendsList.flatMap((item) => item.tags)));
 
 						<!-- 悬停装饰效果 -->
 						<div class="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/5 to-transparent 
-										opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+									opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
 						</div>
 					</div>
 				))}
@@ -200,7 +200,7 @@ const allTags = Array.from(new Set(friendsList.flatMap((item) => item.tags)));
 						<p class="font-medium mb-2">🚀 提交步骤：</p>
 						<ol class="list-decimal list-inside space-y-1 pl-2">
 							<li>在本项目仓库中提交Issues</li>
-							<li>https://github.com/GUOWANGBIAN/mizuki66/issues/4</code></li>
+							<li><a href="https://github.com/GUOWANGBIAN/mizuki66/issues/4" target="_blank" class="text-[var(--primary)]">https://github.com/GUOWANGBIAN/mizuki66/issues/4</a></li>
 						</ol>
 					</div>
 				</div>
