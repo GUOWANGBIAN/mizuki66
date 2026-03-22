@@ -36,6 +36,13 @@ export const friendsData: FriendItem[] = [
 		siteurl: "https://2x.nz/",
 		tags: ["Docs"],
 	},
+	{
+		id: 4,
+		title: "雪诺的小博客",
+		imgurl: "https://blog.4365754.xyz/favicon.ico",
+		desc: "每周分享网络相关知识，解析网络技术。 ✨",
+		siteurl: "https://blog.4365754.xyz",
+	},
 ];
 
 // 获取所有友情链接数据
