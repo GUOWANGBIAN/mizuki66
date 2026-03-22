@@ -1,4 +1,4 @@
-name: Auto Add Friend
+name: Auto Add Friend Link
 
 on:
   issues:
@@ -12,20 +12,26 @@ jobs:
   add-friend:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: lts/*
-
-      - name: Parse Issue Form
+      # 直接解析 Issue 内容（不使用第三方 Action）
+      - name: Parse issue form data
         id: parse
-        uses: zzzgydi/issue-form-parser@v1
+        run: |
+          body="${{ github.event.issue.body }}"
+          extract() {
+            echo "$body" | awk -v title="$1" 'BEGIN{found=0} {if(found){print;exit}} if($0~title){found=1}' | sed 's/^[ \t]*//g'
+          }
+          echo "name=$(extract "网站名称")" >> $GITHUB_OUTPUT
+          echo "imgurl=$(extract "头像 / Logo 地址")" >> $GITHUB_OUTPUT
+          echo "desc=$(extract "网站描述")" >> $GITHUB_OUTPUT
+          echo "siteurl=$(extract "网站地址")" >> $GITHUB_OUTPUT
+          echo "tags=$(extract "标签")" >> $GITHUB_OUTPUT
 
+      # 生成友链条目
       - name: Update friends.ts
         run: |
           NAME="${{ steps.parse.outputs.name }}"
@@ -34,69 +40,48 @@ jobs:
           SITEURL="${{ steps.parse.outputs.siteurl }}"
           TAGS="${{ steps.parse.outputs.tags }}"
 
-          TAGS_JSON=$(echo "$TAGS" | tr ',' '\n' | sed -e 's/^ *//' -e 's/ *$//' | jq -R . | jq -s .)
-          FILE="src/data/friends.ts"
+          # 格式化标签
+          TAGS_ARR=$(echo "$TAGS" | tr ',' '\n' | sed 's/^ *//;s/ *$//' | xargs -I {} echo '"{}"' | paste -sd "," -)
+          TAGS_ARR="[${TAGS_ARR}]"
 
+          FILE=src/data/friends.ts
+
+          # 自动 ID 自增
           MAX_ID=$(grep -oP 'id:\s*\K\d+' $FILE | sort -n | tail -1)
           if [ -z "$MAX_ID" ]; then NEW_ID=1; else NEW_ID=$((MAX_ID + 1)); fi
 
-          NEW_ITEM="  {
-            id: $NEW_ID,
-            title: \"$NAME\",
-            imgurl: \"$IMGURL\",
-            desc: \"$DESC\",
-            siteurl: \"$SITEURL\",
-            tags: $TAGS_JSON,
-          },"
+          # 生成新条目
+          NEW_ITEM="	{
+		id: $NEW_ID,
+		title: \"$NAME\",
+		imgurl: \"$IMGURL\",
+		desc: \"$DESC\",
+		siteurl: \"$SITEURL\",
+		tags: $TAGS_ARR,
+	},"
 
-          content=$(sed -n '/export const friendsData: FriendItem\[] = \[/,/];/p' $FILE | grep -v "export const" | grep -v "^];$")
+          # 插入到 friendsData 数组
+          awk -v item="$NEW_ITEM" '
+            /export const friendsData/ { print; in_array=1; next }
+            in_array && /^\];/ { print item; print "]"; in_array=0; next }
+            { print }
+          ' $FILE > tmp && mv tmp $FILE
 
-          echo "// 友情链接数据配置
-// 用于管理友情链接页面的数据
-
-export interface FriendItem {
-  id: number;
-  title: string;
-  imgurl: string;
-  desc: string;
-  siteurl: string;
-  tags: string[];
-}
-
-// 友情链接数据
-export const friendsData: FriendItem[] = [
-$content
-$NEW_ITEM
-];
-
-export function getFriendsList(): FriendItem[] {
-  return friendsData;
-}
-
-export function getShuffledFriendsList(): FriendItem[] {
-  const shuffled = [...friendsData];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  return shuffled;
-}" > $FILE
-
-      - name: Commit changes
+      # 提交到仓库
+      - name: Commit and push
         uses: EndBug/add-and-commit@v9
         with:
-          message: "feat: auto add friend"
+          message: "✅ Auto add friend: ${{ steps.parse.outputs.name }}"
           committer_name: GitHub Actions
-          committer_email: actions@github.com
+          committer_email:actions@github.com
           add: src/data/friends.ts
 
-      - name: Reply
-        uses: actions/github-script@v7
+      # 回复并关闭 Issue
+      - name: Reply and close issue
+        uses: peter-evans/close-issue@v3
         with:
-          script: |
-            github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body: "✅ 友链已自动添加成功！"
-            })
+          comment: |
+            ✅ **友链已自动添加成功！**
+            已写入：src/data/friends.ts
+            自动 ID：${{ steps.parse.outputs.id }}
+            部署后生效～

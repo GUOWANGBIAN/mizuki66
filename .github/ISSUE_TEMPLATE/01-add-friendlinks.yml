@@ -1,44 +1,33 @@
-name: 🤝 申请友链 / Add Friend
-description: 申请添加友链到我的博客
+name: 申请友链
 title: "友链申请 | 网站名称"
-labels: ["友链"]
 body:
   - type: input
     id: name
     attributes:
       label: 网站名称
-      placeholder: 例：我的个人博客
     validations:
       required: true
-
   - type: input
     id: imgurl
     attributes:
       label: 头像 / Logo 地址
-      placeholder: https://xxx.com/avatar.png
     validations:
       required: true
-
   - type: input
     id: desc
     attributes:
       label: 网站描述
-      placeholder: 例：热爱技术，热爱生活
     validations:
       required: true
-
   - type: input
     id: siteurl
     attributes:
       label: 网站地址
-      placeholder: https://xxx.com
     validations:
       required: true
-
   - type: input
     id: tags
     attributes:
       label: 标签（英文逗号分隔）
-      placeholder: 例：Blog,Tech,Life
     validations:
       required: true
