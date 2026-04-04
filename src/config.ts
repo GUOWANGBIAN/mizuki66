@@ -549,6 +549,21 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 			// 动画延迟时间
 			animationDelay: 250,
 		},
+		{
+			// 组件类型：天气组件 (IP 定位 + 高德天气 + 省份特色文案)
+			type: "weather",
+			// 是否启用该组件
+			enable: true,
+			// 组件显示顺序
+			order: 7,
+			// 组件位置
+			position: "top",
+			// 所在侧边栏
+			sidebar: "right",
+			// CSS 类名
+			class: "onload-animation",
+			// 动画延迟时间
+			animationDelay: 300,
 	],
 
 	// 默认动画配置
