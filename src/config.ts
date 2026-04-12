@@ -565,7 +565,7 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 			// 动画延迟时间
 			animationDelay: 300,
 		},
-		]
+		],
 
 	// 默认动画配置
 	defaultAnimation: {
