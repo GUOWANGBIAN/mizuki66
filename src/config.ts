@@ -136,10 +136,10 @@ export const siteConfig: SiteConfig = {
 
 			subtitle: [
 				"平常的日子，因为有你刚刚好",
-   				"直到现在，你仍是我的光",
-    			"不知不觉间，你已成了我的日常",
-    			"与你说话时，每天都会亮起一小片欢愉",
-				"今日无事，却有小事发生"
+				"直到现在，你仍是我的光",
+				"不知不觉间，你已成了我的日常",
+				"与你说话时，每天都会亮起一小片欢愉",
+				"今日无事，却有小事发生",
 			],
 			typewriter: {
 				enable: true, // 启用副标题打字机效果
@@ -171,16 +171,16 @@ export const siteConfig: SiteConfig = {
 	generateOgImages: true, // 🔧 SEO优化：启用OpenGraph图片生成，提升Bing搜索结果展示效果（注意：生产环境启用，本地调试可临时关闭）
 	favicon: [
 		// 留空以使用默认 favicon
-		 {
-		   src: '/favicon/home.png',    // 图标文件路径
-		   theme: 'light',              // 可选，指定主题 'light' | 'dark'
-		   sizes: '32x32',              // 可选，图标大小
-		 },
-		 {
-		   src: '/favicon/home.png',    // 🔧 SEO优化：补充深色模式favicon，适配不同设备
-		   theme: 'dark',
-		   sizes: '32x32',
-		 }
+		{
+			src: "/favicon/home.png", // 图标文件路径
+			theme: "light", // 可选，指定主题 'light' | 'dark'
+			sizes: "32x32", // 可选，图标大小
+		},
+		{
+			src: "/favicon/home.png", // 🔧 SEO优化：补充深色模式favicon，适配不同设备
+			theme: "dark",
+			sizes: "32x32",
+		},
 	],
 
 	// 字体配置
@@ -312,7 +312,7 @@ export const navBarConfig: NavBarConfig = {
 };
 
 export const profileConfig: ProfileConfig = {
-	avatar: "assets/images/touxiang.webp", // 相对于 /src 目录。如果以 '/' 开头，则相对于 /public 目录
+	avatar: "assets/images/touxiang.jpg", // 相对于 /src 目录。如果以 '/' 开头，则相对于 /public 目录
 	name: "GGGuoshifu",
 	bio: "The world is big, you have to go and see",
 	typewriter: {
@@ -349,7 +349,7 @@ export const permalinkConfig: PermalinkConfig = {
 	 * - %monthnum% : 2位月份 (01-12)
 	 * - %day% : 2位日期 (01-31)
 	 * - %hour% : 2位小时 (00-23)
-	 * - %minute% : 2位分钟 (00-59)  
+	 * - %minute% : 2位分钟 (00-59)
 	 * - %second% : 2位秒数 (00-59)
 	 * - %post_id% : 文章序号（按发布时间升序排列，最早的文章为1）
 	 * - %postname% : 文章文件名（slug）
@@ -408,7 +408,7 @@ export const musicPlayerConfig: MusicPlayerConfig = {
 };
 
 export const footerConfig: FooterConfig = {
-	enable: false, 
+	enable: false,
 	// 也可以直接编辑 FooterConfig.html 文件来添加备案号等自定义内容
 	// 注意：若 customHtml 不为空，则使用 customHtml 中的内容；若 customHtml 留空，则使用 FooterConfig.html 文件中的内容
 	// FooterConfig.html 可能会在未
@@ -532,7 +532,7 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 			// 动画延迟时间
 			animationDelay: 200,
 		},
-		
+
 		{
 			// 组件类型：日历组件(移动端不显示)
 			type: "calendar",
@@ -565,7 +565,7 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 			// 动画延迟时间
 			animationDelay: 300,
 		},
-		],
+	],
 
 	// 默认动画配置
 	defaultAnimation: {
@@ -670,5 +670,5 @@ export const umamiConfig = {
 	baseUrl: "https://api.umami.is", // Umami Cloud API地址
 	scripts: `
 <script defer src="XXXX.XXX" data-website-id="ABCD1234"></script>
-  `.trim(), // 上面填你要插入的Script,不用再去Layout中插入 
+  `.trim(), // 上面填你要插入的Script,不用再去Layout中插入
 } as const;
