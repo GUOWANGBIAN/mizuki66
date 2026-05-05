@@ -44,6 +44,14 @@ export const friendsData: FriendItem[] = [
 		siteurl: "https://blog.4365754.xyz",
 		tags: ["Docs"],
 	},
+	{
+		id:5,
+		title: "UpXuu;s blog",
+		imgurl: "https://upxuu.com/images/20260214145619.jpg",
+		desc: "逐光而上！",
+		siteurl: "https://upxuu.com",
+		tags: ["web"], //（Docs，web，tools）
+},
 ];
 
 // 获取所有友情链接数据
