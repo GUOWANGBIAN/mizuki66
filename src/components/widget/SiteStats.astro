@@ -254,7 +254,7 @@ const stats = [
 
   async function fetchWeatherAndLocation() {
     try {
-      // 第一步：通过高德 API 获取 IP 定位信息
+      // 第一步：通过高德 API 获取 IP 定位信息     
       const locationResponse = await fetch('https://restapi.amap.com/v3/ip?key=9aa187f1492687837e74648455f65179');
       if (!locationResponse.ok) {
         throw new Error('获取位置失败');
