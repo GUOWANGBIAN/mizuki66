@@ -111,8 +111,12 @@ if (siteConfig.generateOgImages && postSlug) {
 	ogImageUrl = new URL(`/og/${postSlug}.png`, Astro.site).toString();
 }
 
-// 为非文章页面设置默认 OG 图片（使用首页 banner 图片）
-const defaultOgImageUrl = new URL("/assets/desktop-banner/1.webp", Astro.site).toString();
+// 为非文章页面设置默认 OG 图片
+// 使用绝对路径，确保 QQ/微信等平台可以访问
+const siteUrl = siteConfig.siteURL.endsWith("/")
+	? siteConfig.siteURL.slice(0, -1)
+	: siteConfig.siteURL;
+const defaultOgImageUrl = `${siteUrl}/assets/desktop-banner/1.webp`;
 const finalOgImageUrl = ogImageUrl || defaultOgImageUrl;
 
 const favicons: Favicon[] =
@@ -240,7 +244,7 @@ if (siteConfig.font) {
 		<meta property="og:image" content={finalOgImageUrl} />
 		<meta property="og:image:width" content="1200" />
 		<meta property="og:image:height" content="630" />
-		<meta property="og:image:type" content="image/webp" />
+		<meta property="og:image:type" content="image/png" />
 		<meta property="og:image:alt" content={pageTitle} />
 		{
 			setOGTypeArticle ? (
@@ -255,6 +259,16 @@ if (siteConfig.font) {
 		<meta name="twitter:description" content={description || pageTitle} />
 		<meta name="twitter:image" content={finalOgImageUrl} />
 		<meta name="twitter:image:alt" content={pageTitle} />
+		<!-- QQ/微信专用标签 -->
+		<meta itemprop="name" content={pageTitle} />
+		<meta itemprop="description" content={description || pageTitle} />
+		<meta itemprop="image" content={finalOgImageUrl} />
+		<meta name="qq:title" content={pageTitle} />
+		<meta name="qq:description" content={description || pageTitle} />
+		<meta name="qq:image" content={finalOgImageUrl} />
+		<!-- 微信专用 -->
+		<meta property="og:image:url" content={finalOgImageUrl} />
+		<meta property="og:image:secure_url" content={finalOgImageUrl} />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
 		<!-- 标准 favicon - 搜索引擎优先查找根目录的 favicon.ico -->
