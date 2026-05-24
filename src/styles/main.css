@@ -5,6 +5,7 @@
 /* 导入动画样式 */
 @import "./transition.css";
 @import "./animation-enhancements.css";
+@import "./cool-animations.css";
 /* 导入渐变按钮样式 */
 @import "./gradient-buttons.css";
 /* 加密内容样式已移除，现在直接使用非加密文章的样式 */
