@@ -38,18 +38,14 @@
   opacity: 1;
 }
 
-.card-glow:hover {
-  transform: translateY(-2px);
-}
-
 /* 亮色模式悬停阴影 */
 .card-glow:hover {
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 
 /* 暗色模式悬停阴影 */
 .dark .card-glow:hover {
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 /* 文字渐变动画 */
