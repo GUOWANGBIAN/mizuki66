@@ -806,51 +806,6 @@ const transparentClass = shouldEnableTransparency
 
 <!-- 保留此元素以确保Swup正常工作 -->
 {(!siteConfig.toc.enable || isFloatTOC) && <div id="toc-container" class="hidden"></div>}
-
-<!-- 滚动渐显动画脚本 -->
-<script is:inline>
-  document.addEventListener('DOMContentLoaded', function() {
-    // 滚动渐显动画
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.1
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('revealed');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, observerOptions);
-
-    // 观察所有带有 scroll-reveal 类的元素
-    document.querySelectorAll('.scroll-reveal').forEach(el => {
-      observer.observe(el);
-    });
-
-    // 为卡片添加鼠标跟踪光效
-    document.querySelectorAll('.card-base').forEach(card => {
-      card.classList.add('card-glow');
-
-      card.addEventListener('mousemove', function(e) {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-
-        card.style.setProperty('--mouse-x', x + 'px');
-        card.style.setProperty('--mouse-y', y + 'px');
-
-        // 更新光效位置
-        const before = card.querySelector(':before') || card;
-        before.style.left = x + 'px';
-        before.style.top = y + 'px';
-      });
-    });
-  });
-</script>
 </Layout>
 
 <style>
