@@ -8,6 +8,7 @@ import Profile from "@/components/widget/Profile.astro";
 import SiteStats from "@/components/widget/SiteStats.astro";
 import Tags from "@/components/widget/Tags.astro";
 import TOC from "@/components/widget/TOC.astro";
+import WeatherWidget from "@/components/widget/WeatherWidget.astro";
 import { widgetManager } from "@/utils/widget-manager";
 
 interface Props {
@@ -34,6 +35,7 @@ const componentMap = {
 	"music-player": MusicPlayer,
 	"site-stats": SiteStats,
 	calendar: Calendar,
+	weather: WeatherWidget,
 };
 
 // 渲染组件的辅助函数
