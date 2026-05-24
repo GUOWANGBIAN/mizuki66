@@ -33,6 +33,19 @@ export const projectsData: Project[] = [
 		endDate: "2025-05-01",
 		featured: false,
 	},
+	{
+		id: "mcwebsite",
+		title: "MC Website",
+		description:
+			"Minecraft相关网站项目，提供Minecraft服务器管理和展示功能。",
+		image: "",
+		category: "web",
+		techStack: ["HTML", "CSS", "JavaScript"],
+		status: "completed",
+		sourceCode: "https://github.com/GUOWANGBIAN/mcwebsite",
+		startDate: "2025-01-01",
+		featured: false,
+	},
 ];
 
 // Get project statistics
