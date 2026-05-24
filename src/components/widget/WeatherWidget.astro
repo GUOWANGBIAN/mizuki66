@@ -1,5 +1,7 @@
 ---
 import { Icon } from "astro-icon/components";
+import I18nKey from "../../i18n/i18nKey";
+import { i18n } from "../../i18n/translation";
 import WidgetLayout from "./WidgetLayout.astro";
 
 interface Props {
@@ -10,14 +12,14 @@ interface Props {
 const { class: className, style } = Astro.props;
 ---
 
-<WidgetLayout id="weather-widget" class={className} style={style}>
-	<div class="flex flex-col gap-3 p-2">
+<WidgetLayout name="天气信息" id="weather-widget" class={className} style={style}>
+	<div class="flex flex-col gap-3">
 		<!-- IP 定位信息 -->
 		<div class="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
 			<Icon name="material-symbols:location-on-outline" class="text-[var(--primary)] text-lg" />
 			<span id="ip-location">正在获取位置...</span>
 		</div>
-		
+
 		<!-- 天气信息 -->
 		<div id="weather-info" class="hidden">
 			<div class="flex items-center justify-between">
@@ -34,12 +36,12 @@ const { class: className, style } = Astro.props;
 				</div>
 			</div>
 		</div>
-		
+
 		<!-- 省份特色文字 -->
 		<div id="province-message" class="hidden p-3 bg-[var(--primary)]/5 rounded-lg border border-[var(--primary)]/10">
 			<p class="text-sm text-neutral-700 dark:text-neutral-300 italic"></p>
 		</div>
-		
+
 		<!-- 错误信息 -->
 		<div id="weather-error" class="hidden text-sm text-neutral-500 dark:text-neutral-500 text-center py-2">
 			暂时无法获取天气信息
@@ -103,12 +105,12 @@ const { class: className, style } = Astro.props;
 	async function fetchWeatherAndLocation() {
 		try {
 			// 第一步：通过高德 API 获取 IP 定位信息
-			const locationResponse = await fetch('https://restapi.amap.com/v3/ip?key=your_amap_api_key');
+			const locationResponse = await fetch('https://restapi.amap.com/v3/ip?key=9aa187f1492687837e74648455f65179');
 			if (!locationResponse.ok) {
 				throw new Error('获取位置失败');
 			}
 			const locationData = await locationResponse.json();
-			
+
 			if (locationData.status !== '1') {
 				throw new Error(locationData.info || '获取位置失败');
 			}
@@ -120,22 +122,22 @@ const { class: className, style } = Astro.props;
 			// 更新位置显示
 			const locationElement = document.getElementById('ip-location');
 			if (locationElement) {
-				locationElement.textContent = `📍 ${city}`;
+				locationElement.textContent = `${city}`;
 			}
 
 			// 第二步：使用高德天气 API 获取天气信息
-			const weatherResponse = await fetch(`https://restapi.amap.com/v3/weather/weatherInfo?key=your_amap_api_key&city=${adcode}&extensions=base`);
+			const weatherResponse = await fetch(`https://restapi.amap.com/v3/weather/weatherInfo?key=9aa187f1492687837e74648455f65179&city=${adcode}&extensions=base`);
 			if (!weatherResponse.ok) {
 				throw new Error('获取天气失败');
 			}
 			const weatherData = await weatherResponse.json();
-			
+
 			if (weatherData.status !== '1' || !weatherData.lives || weatherData.lives.length === 0) {
 				throw new Error('获取天气失败');
 			}
 
 			const weather = weatherData.lives[0];
-			
+
 			// 更新天气显示
 			const weatherInfo = document.getElementById('weather-info');
 			const weatherIcon = document.getElementById('weather-icon');
@@ -145,28 +147,27 @@ const { class: className, style } = Astro.props;
 			const weatherWind = document.getElementById('weather-wind');
 
 			if (weatherInfo) weatherInfo.classList.remove('hidden');
-			
+
 			if (weatherIcon) {
 				const icon = weatherIcons[weather.weather] || "material-symbols:help";
 				weatherIcon.innerHTML = `<i class="iconify" data-icon="${icon}"></i>`;
-				// 重新加载图标
 				if (window.Iconify) {
 					window.Iconify.scanDOM();
 				}
 			}
-			
+
 			if (weatherTemp) {
 				weatherTemp.textContent = `${weather.temperature}°C`;
 			}
-			
+
 			if (weatherDesc) {
 				weatherDesc.textContent = weather.weather;
 			}
-			
+
 			if (weatherHumidity) {
 				weatherHumidity.textContent = `湿度：${weather.humidity}%`;
 			}
-			
+
 			if (weatherWind) {
 				weatherWind.textContent = `风向：${weather.winddirection}风 ${weather.windpower}级`;
 			}
@@ -175,7 +176,8 @@ const { class: className, style } = Astro.props;
 			const messageElement = document.getElementById('province-message');
 			const messageText = messageElement?.querySelector('p');
 			if (messageElement && messageText) {
-				const message = provinceMessages[province.replace(/省|市|自治区|特别行政区/g, '')];
+				const cleanProvince = province.replace(/省|市|自治区|特别行政区/g, '');
+				const message = provinceMessages[cleanProvince];
 				if (message) {
 					messageText.textContent = message;
 					messageElement.classList.remove('hidden');
@@ -186,11 +188,11 @@ const { class: className, style } = Astro.props;
 			console.error('获取天气信息失败:', error);
 			const errorElement = document.getElementById('weather-error');
 			const locationElement = document.getElementById('ip-location');
-			
+
 			if (locationElement) {
 				locationElement.textContent = '位置获取失败';
 			}
-			
+
 			if (errorElement) {
 				errorElement.classList.remove('hidden');
 			}
@@ -201,13 +203,3 @@ const { class: className, style } = Astro.props;
 	document.addEventListener('DOMContentLoaded', fetchWeatherAndLocation);
 	fetchWeatherAndLocation();
 </script>
-
-<style>
-	#weather-widget {
-		transition: all 0.3s ease;
-	}
-	
-	#weather-widget:hover {
-		transform: translateY(-2px);
-	}
-</style>
