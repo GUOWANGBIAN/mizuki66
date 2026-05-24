@@ -1,7 +1,5 @@
 import { getSortedPosts } from "../../utils/content-utils";
 
-export const prerender = false;
-
 export async function GET() {
 	const posts = await getSortedPosts();
 
@@ -21,7 +19,6 @@ export async function GET() {
 	return new Response(JSON.stringify(allPostsData), {
 		headers: {
 			"Content-Type": "application/json",
-			"Cache-Control": "no-cache, no-store, must-revalidate",
 		},
 	});
 }
