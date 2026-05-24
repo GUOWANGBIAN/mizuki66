@@ -330,6 +330,11 @@ export const profileConfig: ProfileConfig = {
 			icon: "fa6-brands:github",
 			url: "https://github.com/GUOWANGBIAN",
 		},
+		{
+			name: "抖音",
+			icon: "fa6-brands:tiktok",
+			url: "https://www.douyin.com/user/你的抖音ID",
+		},
 	],
 };
 
