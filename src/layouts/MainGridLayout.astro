@@ -831,16 +831,23 @@ const transparentClass = shouldEnableTransparency
       observer.observe(el);
     });
 
-    // 为卡片添加悬停发光效果
+    // 为卡片添加鼠标跟踪光效
     document.querySelectorAll('.card-base').forEach(card => {
       card.classList.add('card-glow');
-    });
 
-    // 为链接添加下划线动画
-    document.querySelectorAll('a[href]').forEach(link => {
-      if (!link.querySelector('img') && !link.classList.contains('btn-regular')) {
-        link.classList.add('link-underline');
-      }
+      card.addEventListener('mousemove', function(e) {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        card.style.setProperty('--mouse-x', x + 'px');
+        card.style.setProperty('--mouse-y', y + 'px');
+
+        // 更新光效位置
+        const before = card.querySelector(':before') || card;
+        before.style.left = x + 'px';
+        before.style.top = y + 'px';
+      });
     });
   });
 </script>
