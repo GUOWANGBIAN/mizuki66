@@ -192,6 +192,22 @@ export default defineConfig({
 				},
 			},
 		},
+		// 图片优化配置
+		assetsInclude: ['**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.webp', '**/*.gif'],
+	},
+
+	// 图片优化配置
+	image: {
+		// 启用图片优化
+		service: {
+			entrypoint: 'astro/assets/services/sharp',
+			config: {
+				// 压缩质量
+				quality: 80,
+				// 允许的图片格式
+				formats: ['webp', 'avif'],
+			},
+		},
 	}, 
 	// 添加服务器配置（放在最后，在 vite 配置后面）
 	server: {
