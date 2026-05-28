@@ -309,7 +309,6 @@ export const navBarConfig: NavBarConfig = {
 				{
 					name: "MC服务器",
 					url: "https://mc.mgstudio.icu",
-					icon: "material-symbols:sports_esports",
 					external: true,
 				},
 			],
