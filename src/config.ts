@@ -306,6 +306,12 @@ export const navBarConfig: NavBarConfig = {
 					url: "/cover/",
 					icon: "material-symbols:brush",
 				},
+				{
+					name: "MC服务器",
+					url: "https://mc.mgstudio.icu",
+					icon: "material-symbols:sports_esports",
+					external: true,
+				},
 			],
 		},
 	],
