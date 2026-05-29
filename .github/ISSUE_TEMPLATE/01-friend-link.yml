@@ -1,6 +1,6 @@
-name: "\U0001F91D \U0001F310 \U0001F517 \U0001F517 \U0001F517 \U0001F517"
-description: "\U0001F517"
-title: "\U0001F517"
+name: "提交友链"
+description: "申请添加友情链接到友链页面"
+title: "[友链] "
 labels: ["friend-link"]
 body:
   - type: input
