@@ -1,0 +1,206 @@
+name: Friend Link Auto Add
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  process-friend-link:
+    runs-on: ubuntu-latest
+    if: contains(github.event.issue.labels.*.name, 'friend-link')
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Parse and validate issue
+        id: parse
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = context.payload.issue.body;
+
+            // Parse YAML form fields
+            function extractField(body, id) {
+              const regex = new RegExp(`### ${id}\\s*\\n\\s*([\\s\\S]*?)(?=\\n### |$)`, 'i');
+              const match = body.match(regex);
+              if (!match) return '';
+              return match[1].trim().replace(/^_No response_$/i, '').trim();
+            }
+
+            const name = extractField(body, '网站名称');
+            const url = extractField(body, '网站地址');
+            const avatar = extractField(body, '头像链接');
+            const desc = extractField(body, '网站描述');
+            const tag = extractField(body, '分类标签');
+
+            // Validate required fields
+            const errors = [];
+            if (!name) errors.push('网站名称');
+            if (!url) errors.push('网站地址');
+            if (!avatar) errors.push('头像链接');
+            if (!desc) errors.push('网站描述');
+
+            if (errors.length > 0) {
+              core.setOutput('valid', 'false');
+              core.setOutput('error', `缺少必填字段: ${errors.join('、')}`);
+              return;
+            }
+
+            // Validate URL format
+            try { new URL(url); } catch {
+              core.setOutput('valid', 'false');
+              core.setOutput('error', `网站地址格式不正确: ${url}`);
+              return;
+            }
+            try { new URL(avatar); } catch {
+              core.setOutput('valid', 'false');
+              core.setOutput('error', `头像链接格式不正确: ${avatar}`);
+              return;
+            }
+
+            core.setOutput('valid', 'true');
+            core.setOutput('name', name);
+            core.setOutput('url', url.replace(/\/+$/, ''));
+            core.setOutput('avatar', avatar);
+            core.setOutput('desc', desc);
+            core.setOutput('tag', tag || 'Docs');
+
+      - name: Check URL reachability
+        if: steps.parse.outputs.valid == 'true'
+        id: check
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const siteUrl = '${{ steps.parse.outputs.url }}';
+            const avatarUrl = '${{ steps.parse.outputs.avatar }}';
+
+            async function checkUrl(url, label) {
+              try {
+                const res = await fetch(url, { method: 'HEAD', signal: AbortSignal.timeout(10000) });
+                if (!res.ok) {
+                  core.setOutput('reachable', 'false');
+                  core.setOutput('error', `${label} 无法访问 (HTTP ${res.status}): ${url}`);
+                  return false;
+                }
+                return true;
+              } catch (e) {
+                // HEAD may not be supported, try GET
+                try {
+                  const res = await fetch(url, { method: 'GET', signal: AbortSignal.timeout(10000) });
+                  if (!res.ok) {
+                    core.setOutput('reachable', 'false');
+                    core.setOutput('error', `${label} 无法访问 (HTTP ${res.status}): ${url}`);
+                    return false;
+                  }
+                  return true;
+                } catch (e2) {
+                  core.setOutput('reachable', 'false');
+                  core.setOutput('error', `${label} 无法访问 (连接失败): ${url}`);
+                  return false;
+                }
+              }
+            }
+
+            const ok1 = await checkUrl(siteUrl, '网站地址');
+            if (ok1) {
+              const ok2 = await checkUrl(avatarUrl, '头像链接');
+              if (ok2) {
+                core.setOutput('reachable', 'true');
+              }
+            }
+
+      - name: Add friend entry
+        if: steps.parse.outputs.valid == 'true' && steps.check.outputs.reachable == 'true'
+        id: add
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const filePath = 'src/data/friends.ts';
+            let content = fs.readFileSync(filePath, 'utf-8');
+
+            // Extract existing IDs to find the next one
+            const idMatches = content.matchAll(/\bid:\s*(\d+)/g);
+            const maxId = Math.max(...[...idMatches].map(m => parseInt(m[1])), 0);
+            const newId = maxId + 1;
+
+            const name = `${{ steps.parse.outputs.name }}`;
+            const url = `${{ steps.parse.outputs.url }}`;
+            const avatar = `${{ steps.parse.outputs.avatar }}`;
+            const desc = `${{ steps.parse.outputs.desc }}`;
+            const tag = `${{ steps.parse.outputs.tag }}`;
+
+            // Escape special chars for TypeScript string
+            const esc = s => s.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+
+            const newEntry = `\t{
+\t\tid: ${newId},
+\t\ttitle: "${esc(name)}",
+\t\timgurl: "${esc(avatar)}",
+\t\tdesc: "${esc(desc)}",
+\t\tsiteurl: "${esc(url)}",
+\t\ttags: ["${esc(tag)}"],
+\t},`;
+
+            // Insert before the closing ];
+            const insertPoint = content.lastIndexOf('];');
+            content = content.slice(0, insertPoint) + newEntry + '\n' + content.slice(insertPoint);
+
+            fs.writeFileSync(filePath, content, 'utf-8');
+
+            core.setOutput('id', newId.toString());
+            console.log(`Added friend: #${newId} ${name} (${url})`);
+
+      - name: Commit and push
+        if: steps.add.outputs.id
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/data/friends.ts
+          git commit -m "feat: add friend link #${{ steps.add.outputs.id }} - ${{ steps.parse.outputs.name }}"
+          git push
+
+      - name: Comment success
+        if: steps.add.outputs.id
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const id = '${{ steps.add.outputs.id }}';
+            const name = '${{ steps.parse.outputs.name }}';
+            const url = '${{ steps.parse.outputs.url }}';
+            const tag = '${{ steps.parse.outputs.tag }}';
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `## ✅ 友链添加成功！\n\n| 字段 | 值 |\n|------|----|\n| ID | ${id} |\n| 名称 | ${name} |\n| 地址 | ${url} |\n| 标签 | ${tag} |\n\n友链已自动添加到 [friends.ts](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/master/src/data/friends.ts)，部署后即可在友链页面看到。`
+            });
+
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              state: 'closed'
+            });
+
+      - name: Comment failure
+        if: failure() || steps.parse.outputs.valid == 'false' || steps.check.outputs.reachable == 'false'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            let error = '${{ steps.parse.outputs.error }}' || '${{ steps.check.outputs.error }}' || '处理过程中发生未知错误';
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `## ❌ 友链添加失败\n\n**原因：** ${error}\n\n请检查填写的信息后重新提交。`
+            });
+
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              state: 'closed',
+              state_reason: 'not_planned'
+            });

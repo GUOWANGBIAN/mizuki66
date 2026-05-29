@@ -1,0 +1,49 @@
+name: "\U0001F91D \U0001F310 \U0001F517 \U0001F517 \U0001F517 \U0001F517"
+description: "\U0001F517"
+title: "\U0001F517"
+labels: ["friend-link"]
+body:
+  - type: input
+    id: name
+    attributes:
+      label: "网站名称"
+      placeholder: "你的网站名称"
+    validations:
+      required: true
+
+  - type: input
+    id: url
+    attributes:
+      label: "网站地址"
+      placeholder: "https://example.com"
+    validations:
+      required: true
+
+  - type: input
+    id: avatar
+    attributes:
+      label: "头像链接"
+      description: "你的网站头像/Logo 图片链接"
+      placeholder: "https://example.com/avatar.png"
+    validations:
+      required: true
+
+  - type: input
+    id: description
+    attributes:
+      label: "网站描述"
+      placeholder: "一句话介绍你的网站"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: tag
+    attributes:
+      label: "分类标签"
+      description: "选择一个最符合你网站的分类，不选则默认为 Docs"
+      options:
+        - "Docs"
+        - "web"
+        - "tools"
+    validations:
+      required: false
