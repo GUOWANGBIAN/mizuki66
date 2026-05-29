@@ -586,22 +586,24 @@ const transparentClass = shouldEnableTransparency
                         <li class={`carousel-item absolute inset-0 transition-all duration-500 ${index === 0 ? 'opacity-100 scale-100' : 'opacity-0 scale-110'}`}>
                             <!-- Mobile: use mobile-specific images with same logic as desktop -->
                             {hasMobileImage && (
-                                <ImageWrapper 
-                                    alt={`Mobile banner image ${index + 1}`} 
+                                <ImageWrapper
+                                    alt={`Mobile banner image ${index + 1}`}
                                     class:list={["block lg:hidden object-cover h-full w-full transition-transform duration-500 ease-out"]}
-                                    src={Array.isArray(bannerImages.mobile) ? bannerImages.mobile[index] : (typeof bannerImages.mobile === 'string' ? bannerImages.mobile : '')} 
+                                    src={Array.isArray(bannerImages.mobile) ? bannerImages.mobile[index] : (typeof bannerImages.mobile === 'string' ? bannerImages.mobile : '')}
                                     position={siteConfig.banner.position}
                                     loading={index === 0 ? "eager" : "lazy"}
+                                    fetchpriority={index === 0 ? "high" : "low"}
                                 />
                             )}
                             <!-- Desktop: use desktop-specific images -->
                             {hasDesktopImage && (
-                                <ImageWrapper 
-                                    alt={`Desktop banner image ${index + 1}`} 
+                                <ImageWrapper
+                                    alt={`Desktop banner image ${index + 1}`}
                                     class:list={["hidden lg:block object-cover h-full w-full transition-transform duration-500 ease-out"]}
-                                    src={Array.isArray(bannerImages.desktop) ? bannerImages.desktop[index] : (typeof bannerImages.desktop === 'string' ? bannerImages.desktop : '')} 
+                                    src={Array.isArray(bannerImages.desktop) ? bannerImages.desktop[index] : (typeof bannerImages.desktop === 'string' ? bannerImages.desktop : '')}
                                     position={siteConfig.banner.position}
                                     loading={index === 0 ? "eager" : "lazy"}
+                                    fetchpriority={index === 0 ? "high" : "low"}
                                 />
                             )}
                         </li>
