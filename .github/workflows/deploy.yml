@@ -20,6 +20,7 @@ jobs:
             git clean -fd
             umask 022
             pnpm install
+            chmod +x node_modules/.bin/*
             pnpm build
             pnpm run submit
             chown -R www:www .
