@@ -18,9 +18,9 @@ jobs:
             git fetch origin
             git reset --hard origin/master
             git clean -fd
+            chmod -R 755 /www/wwwroot/mizuki66
             umask 022
             pnpm install
-            chmod +x node_modules/.bin/*
             pnpm build
             pnpm run submit
             chown -R www:www .
